@@ -5,8 +5,9 @@ declare const loadImage: any;
 declare const ZoomIn: any;
 declare const ZoomOut: any;
 declare const ZoomTo: any;
-
-
+declare const CheckConnection: any;
+declare const loadSources: any;
+declare const initDevice: any;
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class AppComponent {
 
   ngOnInit(): void {
 
+    CheckConnection();
     // TODO: 
     // Use this websocket to communicate with the backend
 
@@ -33,6 +35,14 @@ export class AppComponent {
     //   this.stringReponse = resp.body || '{}';
     //   const obj = JSON.parse(this.stringReponse);
     //   console.log("response", obj)});
+  }
+
+  loadSources(){
+    loadSources(true);
+  }
+
+  initDevice(){
+    initDevice();
   }
 
   onClick(){
@@ -53,6 +63,10 @@ export class AppComponent {
 
   loadImage(){
     loadImage();
+  }
+
+  CheckConnection(){
+    CheckConnection();
   }
 
   getData(){

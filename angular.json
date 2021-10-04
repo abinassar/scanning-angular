@@ -34,7 +34,13 @@
             ],
             "scripts": [
               "src/assets/js/imagecomponents.js",
-              "src/assets/js/ICLoader.js"
+              "src/assets/js/ICLoader.js",
+              "src/assets/js/ImgScan-vsdoc.js",
+              "src/assets/js/ImgEdit-vsdoc.js",
+              "src/assets/js/default.aspx.js",
+              "src/assets/js/ImgBarDecoder-vsdoc.js",
+              "src/assets/js/ImgThumbnails-vsdoc.js",
+              "src/assets/js/ImgAnnotations-vsdoc.js"
             ]
           },
           "configurations": {
