@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="false" Service="ImageComponents.Web.Imaging.ImageManagerService, ImageComponents.Web.Imaging" CodeBehind="ImageManagerService.svc.cs" Factory="ImageComponents.Web.Imaging.CorsEnabledServiceHostFactory, ImageComponents.Web.Imaging" %>

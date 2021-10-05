@@ -1,8 +1,7 @@
 
-var _webServiceURL ='http://html5v2.ImageComponents.net/api';
-// var _webServiceURL = "../../../../../ImageManagerService.svc";
+var _webServiceURL ='http://localhost/IC.Web.Imaging/api';
+// var _webServiceURL = "../../../ImageManagerService.svc";
 var _imgEdit = null;
-var _imgScan = new ImgScan();
 var _imgScan = new ImgScan();
 
 var _isMobile = true;
@@ -35,6 +34,9 @@ function loadSources(isTwain) {
                     alert('No scanner sources found.');
                 }
             });
+            var pixelType = ImgScan.ICAP_PIXELTYPE;
+            console.log("pixel type "+ pixelType);
+            // getEnumValue(obj, caps.TwainICapabilities.ICapabilitiesValues.PixelTypes[a]);
         });
     }
     else {
