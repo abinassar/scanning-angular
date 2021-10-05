@@ -153,15 +153,18 @@ function UpdateDeviceTWAINSettings() {
     _imgScan.SetTwainSettings.TwainICapabilities.ImageFileFormatValue = 0;
     _imgScan.SetTwainSettings.TwainICapabilities.PaperOrientationValue = 0;
     _imgScan.SetTwainSettings.TwainICapabilities.PaperSizeValue = 0;
-    _imgScan.SetTwainSettings.TwainICapabilities.XResolutionValue = 50;
-    _imgScan.SetTwainSettings.TwainICapabilities.YResolutionValue = 50;
-    _imgScan.SetTwainSettings.TwainICapabilities.PixelTypeValue = 0;
+    _imgScan.SetTwainSettings.TwainICapabilities.XResolutionValue = 100;
+    _imgScan.SetTwainSettings.TwainICapabilities.YResolutionValue = 100;
+    _imgScan.SetTwainSettings.TwainICapabilities.PixelTypeValue = 2;
     _imgScan.SetTwainSettings.TwainICapabilities.IsAutoBrightEnabled = false;
     _imgScan.SetTwainSettings.TwainICapabilities.IsAutoRemoveBlankPagesEnabled = 0;
     _imgScan.SetTwainSettings.TwainICapabilities.BrightnessValue = 0;
     _imgScan.SetTwainSettings.TwainICapabilities.ContrastValue = 0;
     console.log("settings after update ", _imgScan.SetTwainSettings);
-
+    // _imgScan.SetTwainSettings = new ImgScan.TwainValues(_devSettings.SetTwainSettings);
+    // _imgScan.SetWIASettings = new ImgScan.WIAValues(_devSettings.SetWIASettings);
+    _imgScan.SetTwainSettings.TwainICapabilities.UnitsValue = ImgScan.ICAP_UNITS.INCHES;
+    _imgScan.Acquire();
 }
 
 function scanImage() {
