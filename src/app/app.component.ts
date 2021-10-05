@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from './services/data.service';
+import { DataSourceSettings } from '../interfaces/dataSourcesSettings';
 declare const myTest: any;
 declare const loadImage: any;
 declare const ZoomIn: any;
@@ -18,6 +19,7 @@ export class AppComponent {
   title = 'scanning-angular-app';
 
   stringReponse : string | null | undefined;
+  dataSourceSettings : DataSourceSettings | undefined;
 
   constructor(private _dataService: DataService){
     // this.getData();
@@ -38,7 +40,8 @@ export class AppComponent {
   }
 
   loadSources(){
-    loadSources(true);
+    this.dataSourceSettings = loadSources(true);
+    // console.log("Data sources settings ", JSON.stringify(this.dataSourceSettings));
   }
 
   initDevice(){
