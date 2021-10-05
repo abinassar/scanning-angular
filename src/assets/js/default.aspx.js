@@ -1,20 +1,20 @@
-﻿/// <reference path="ImgEdit-vsdoc.js"/>
-/// <reference path="ImgThumbnails-vsdoc.js"/>
-/// <reference path="ImgScan-vsdoc.js"/>
-/// <reference path="ImgAnnotations-vsdoc.js"/>
-var _webServiceURL = "ImageManagerService.svc";
-var _imgEdit = null;
-var _imgThumbnails = null;
-var _imgScan = null;
-var _imgAnnotations = null;
-//Comment the following lines on release. This is just for intellisense purposes.
-_imgEdit = new ImgEdit();
-_imgThumbnails = new ImgThumbnails();
-_imgScan = new ImgScan();
-_imgAnnotations = new ImgAnnotations();
+﻿// /// <reference path="ImgEdit-vsdoc.js"/>
+// /// <reference path="ImgThumbnails-vsdoc.js"/>
+// /// <reference path="ImgScan-vsdoc.js"/>
+// /// <reference path="ImgAnnotations-vsdoc.js"/>
+// var _webServiceURL = "ImageManagerService.svc";
+// var _imgEdit = null;
+// var _imgThumbnails = null;
+// var _imgScan = null;
+// var _imgAnnotations = null;
+// //Comment the following lines on release. This is just for intellisense purposes.
+// _imgEdit = new ImgEdit();
+// _imgThumbnails = new ImgThumbnails();
+// _imgScan = new ImgScan();
+// _imgAnnotations = new ImgAnnotations();
 
-var _isImgScanDownloading = false;
-var _driverType = false;
+// var _isImgScanDownloading = false;
+// var _driverType = false;
 
 function pageLoad() {
     //Get the ImgEdit control.
