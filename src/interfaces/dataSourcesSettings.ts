@@ -1,4 +1,4 @@
-export interface DataSourceSettings {
+export interface TWAINScanSettings {
   TwainCapabilities: TwainCapabilities;
   TwainICapabilities: TwainICapabilities;
 }
@@ -16,8 +16,8 @@ export interface TwainICapabilities {
   UnitsValue: number;
   BrightnessValue: number;
   ContrastValue: number;
-  AreaRegion: AreaRegion;
-  ICapabilitiesValues: ICapabilitiesValues;
+  AreaRegion?: AreaRegion;
+  ICapabilitiesValues?: ICapabilitiesValues;
 }
 
 export interface ICapabilitiesValues {
@@ -53,7 +53,7 @@ export interface TwainCapabilities {
   ShowProgressIndicator: boolean;
 }
 
-interface FileFormat {
+export interface FileFormat {
   BMP: number;
   DEJAVU: number;
   EXIF: number;
@@ -70,4 +70,89 @@ interface FileFormat {
   TIFF: number;
   TIFFMULTI: number;
   XBM: number;
+}
+
+export interface ScanGeneralSettings {
+  ImageAcquireMode?: number;
+  FileNamePrefix?: string;
+  OutputFormat?: number;
+  OutputCompression?: number;
+  BinarizationFilter?: number;
+  PageCountSeparationValue?: number;
+  RemoveBlankPages?: boolean;
+  BlankPageRemoveBorders?: boolean;
+  BlankPageRemoveEmptyData?: boolean;
+  ImageRotation?: number;
+  RemoveImagePageBorders?: boolean;
+  SavePDFAsPDFA?: boolean;
+  BlankPageMargin?: number;
+  StopOnFirstResult?: boolean;
+  ExtensiveSearch?: boolean;
+  EnableCheckDigit?: boolean;
+  ShowScannerUI?: boolean;
+  BlankPageTolerance?: number;
+  OutputDirectory?: string;
+  EnablePreview?: boolean;
+  InsertAtPosition?: number;
+  RaiseFeederEmptyError?: boolean;
+  SaveJPGQuality?: number;
+  ImagePageSeparation?: number;
+  BarcodeTypes?: number[];
+  BarcodeOrientations?: any[];
+  BarcodeSeparationValue?: string;
+  IsBarcodeInFirstPage?: boolean;
+  RemoveBarcodePage?: boolean;
+  ImageFileDirectory?: string;
+  DeviceDriverType?: number;
+}
+
+export let ScanDefaultSettings: ScanGeneralSettings = {
+  "ImageAcquireMode": 0,
+  "FileNamePrefix": "IMG",
+  "OutputFormat": 0,
+  "OutputCompression": 0,
+  "BinarizationFilter": 0,
+  "BlankPageTolerance": 0,
+  "ImagePageSeparation": 0,
+  "BarcodeTypes": [0],
+  "BarcodeSeparationValue": "",
+  "PageCountSeparationValue": 0,
+  "RemoveBlankPages": false,
+  "RemoveBarcodePage": false,
+  "ShowScannerUI": false,
+  "IsBarcodeInFirstPage": false,
+  "EnablePreview": true,
+  "OutputDirectory": "",
+  "DeviceDriverType": 0
+}
+
+export let TWAINDefaultSettings: TWAINScanSettings = {
+    "TwainCapabilities": {
+      "CustomDSData": false,
+      "ImageXferCount": -1,
+      "IsAutoDeskewEnabled": false,
+      "IsAutoBorderDetectionEnabled": false,
+      "IsAutoRotationEnabled": false,
+      "IsDuplexEnabled": false,
+      "DuplexTypeValue": 0,
+      "IsFeederEnabled": true,
+      "IsAutoFeedEnabled": true,
+      "IsAutoScanEnabled": false,
+      "AbortWhenNoPaperDetected": false,
+      "ShowProgressIndicator": false
+    },
+    "TwainICapabilities": {
+      "ImageXferMech": 0,
+      "ImageFileFormatValue": 2,
+      "PaperOrientationValue": 0,
+      "PaperSizeValue": 0,
+      "XResolutionValue": 100,
+      "YResolutionValue": 100,
+      "PixelTypeValue": 2,
+      "IsAutoBrightEnabled": false,
+      "IsAutoRemoveBlankPagesEnabled": 0,
+      "UnitsValue": 0,
+      "BrightnessValue": 0,
+      "ContrastValue": 0
+    }
 }

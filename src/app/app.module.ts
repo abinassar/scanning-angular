@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 
 // Http Cliente
 import { HttpClientModule } from '@angular/common/http';
+import { ScanViewerComponent } from './shared/Components/scan-viewer/scan-viewer.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ScanViewerComponent
   ],
   imports: [
     BrowserModule,
