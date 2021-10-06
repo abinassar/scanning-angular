@@ -9,6 +9,7 @@ declare const ZoomTo: any;
 declare const CheckConnection: any;
 declare const loadSources: any;
 declare const initDevice: any;
+declare const sendData: any;
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent {
 
   stringReponse : string | null | undefined;
   dataSourceSettings : DataSourceSettings | undefined;
+  testNumber : number | undefined;
 
   constructor(private _dataService: DataService){
     // this.getData();
@@ -27,6 +29,12 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
+
+    // this.dataSourceSettings = loadSources();
+    // console.log("Data source settings ", this.dataSourceSettings);
+
+    // this.testNumber = sendData();
+    // console.log("Received data ", this.testNumber);
 
     CheckConnection();
     // TODO: 

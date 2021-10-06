@@ -21,6 +21,10 @@ ICLoader.Initialize(_webServiceURL, function () {
     _imgEdit.set_licenseValue(_license);
 });
 
+function sendData(){
+    return 2;
+}
+
 function loadSources(isTwain) {
     let dataSourcesSettings;
     _imgScan.DeviceDriverType = _driverType = isTwain ? ImgScan.ICDeviceDriverType.TWAIN : ImgScan.ICDeviceDriverType.WIA;
@@ -67,10 +71,11 @@ function loadSources(isTwain) {
 
 
             _imgScan.GetScannerCaps('TWAIN2 FreeImage Software Scanner', function (caps) {
-                // console.log("Capabilities of scanner ", JSON.stringify(caps))
+                console.log("Capabilities of scanner ", JSON.stringify(caps))
                 dataSourcesSettings = caps;
                 loadTwainDeviceOptions(caps, null);
                 updateScannerSettings();
+                return JSON.stringify(caps);
                 // console.log("Data source settings ", JSON.stringify(dataSourcesSettings));
             });
             // getEnumValue(obj, caps.TwainICapabilities.ICapabilitiesValues.PixelTypes[a]);
@@ -86,6 +91,7 @@ function loadSources(isTwain) {
                 alert('No scanner sources found.');
             }
         });
+        return null;
     }
     // return dataSourcesSettings;
 }
