@@ -1,69 +1,237 @@
 <button (click)="loadImage()">Click Me</button>
 
-<div>
-  {{dataArray}}
+
+
+
+<div fxLayout="row"
+     fxLayoutAlign="center center">
+
+  <div fxLayout="column"
+       class="mr-20">
+
+    <!-- Buttons to edit image -->
+    <div fxLayout="row" 
+         fxLayoutGap="5px"
+         class="buttons">
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="ZoomIn()">
+          <i class="fas fa-search-plus"></i>
+      </button>
+
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="ZoomOut()">
+          <i class="fas fa-search-minus"></i>
+      </button>
+
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="ZoomTo()">
+        <i class="fas fa-vector-square"></i>
+      </button>
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="BestFit()">
+        <i class="fas fa-expand-arrows-alt"></i>
+      </button>
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="FitToWidth()">
+        <i class="fas fa-arrows-alt-h"></i>
+      </button>
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="FitToHeight()">
+        <i class="fas fa-arrows-alt-v"></i>
+      </button>
+      
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="Magnifying()">
+        <i class="fas fa-search"></i>
+      </button>
+      
+      <button mat-stroked-button
+              class="fs-20"
+              (click)="DeletePage()">
+        <i class="far fa-trash-alt"></i>
+      </button>
+    </div>
+    <!-- Image Edit and Thumbstails -->
+    <div fxLayout="row"
+         class="mt-20">
+      <div id="ImgThumbnails1" style="width:200px;height:500px;"></div>
+      <div id="imgEdit1" style="width:400px;height:500px;"></div>
+    </div>
+
+    <!-- Buttons to next and previous page -->
+
+    <div fxLayout="row" 
+         class="buttons"
+         fxLayoutAlign="flex-end">
+      <button mat-flat-button
+              class="fs-20"
+              (click)="PreviousPage()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button mat-flat-button
+              class="fs-20"
+              (click)="NextPage()">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Settings Buttons -->
+
+  <div fxLayout="column">
+
+    <div class="custom-settings-title">
+      Custom Settings
+    </div>
+
+    <div class="options-container">
+
+      <div fxLayout="row" 
+           class="select-source mb-20">
+        <h3 class="mr-10">Select Source:</h3>
+        <mat-form-field appearance="fill">
+          <mat-label>Select a Scanner</mat-label>
+          <mat-select (selectionChange)=changeSource($event)>
+            <mat-option value="option1">TWAIN2 FreeImage Software Scanner</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+  
+      <div class="custom-radio-buttons">
+        <!-- <mat-radio-group aria-label="Select an option"> -->
+          <div fxLayout="row"
+               fxLayoutAlign="start center"
+               class="mb-20">
+  
+  
+              <mat-checkbox value="1"
+                                class="mr-30"
+                                (change)="changeScannerUI($event)">
+                Show Scanner UI 
+              </mat-checkbox>
+              <mat-checkbox value="2"
+                            (change)="changeADF($event)">
+                Use ADF 
+              </mat-checkbox>
+            
+  
+          </div>
+          <div fxLayout="row"
+               fxLayoutAlign="start center"
+               class="mb-20">
+  
+              <mat-checkbox value="1"
+                            class="mr-30"
+                            (change)="changeAutoRemoveBlankPage($event)">
+                Auto Remove Blank Page
+              </mat-checkbox>
+              <mat-checkbox value="4"
+                            (change)="changeDuplexScan($event)">
+                2-sided Scan
+              </mat-checkbox> 
+            </div>
+  
+        <!-- </mat-radio-group> -->
+      </div>
+  
+      <div fxLayout="row"
+           fxLayoutAlign="start center"
+           class="mb-20">
+        <h3 class="mr-10">Pixel Type:</h3>
+        <mat-radio-group (change)="changePixelType($event)">
+            <mat-radio-button class="mr-10" 
+                          value="0">B&W</mat-radio-button>
+            <mat-radio-button class="mr-10" 
+                          value="1">Gray</mat-radio-button>
+            <mat-radio-button class="mr-10" 
+                          value="2">Color</mat-radio-button>
+        </mat-radio-group>
+      </div>
+  
+      <div fxLayout="row">
+        <h3 class="mr-10">Resolution:</h3>
+        <mat-form-field appearance="fill">
+          <mat-label>Resolution</mat-label>
+          <mat-select (selectionChange)=changeResolution($event)>
+            <mat-option value="option1">50</mat-option>
+            <mat-option value="option2">100</mat-option>
+            <mat-option value="option3">200</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <!-- Settings -->
+
+    <div fxFlexAlign="center">
+      <button mat-stroked-button
+              class="scan-button mr-20"
+              (click)="_scanImage()">
+              Scan
+      </button>
+      <button mat-stroked-button
+        class="scan-button"
+        (click)="loadImage()">
+        Load External File
+      </button>
+    </div>
+
+    <div>
+
+      <button (click)="GetDataSourcesDos()">
+        Get data sources dos
+      </button>
+
+
+
+      <button (click)="_getDataSources()">
+        Get Sources
+      </button>
+      
+      <button (click)="getSourcesAlt()">
+      
+        Get Sources Alt
+      </button>
+      
+      <button (click)="_getSourceSettings()">
+        Get Source Settings
+      </button>
+      
+      <button (click)="_scanImage()">
+        Scan Image
+      </button>
+      
+      <button (click)="_getLocalData()">
+        Get Local Data
+      </button>
+    </div>
+
+  </div>
+
+<!-- <div fxLayout="column">
+
+</div> -->
+
 </div>
 
-<div id="imgEdit1" style="width:400px;height:500px;"></div>
-<div id="ImgThumbnails1" style="width:150px;height:500px;"></div>
 
 
 
 <div id="imgScan1"></div>
 
-<button (click)="NextPage()">
-  Next Page
-</button>
-<button (click)="PreviousPage()">
-  Previous Page
-</button>
 
-<button (click)="ZoomIn()">
-  Zoom in
-</button>
-<button (click)="ZoomOut()">
-  Zoom out
-</button>
-<button (click)="ZoomTo()">
-  Zoom to
-</button>
-<button (click)="_getDataSources()">
-  Get Sources
-</button>
 
-<button (click)="getSourcesAlt()">
 
-  Get Sources Alt
-</button>
 
-<button (click)="_getSourceSettings()">
-  Get Source Settings
-</button>
 
-<button (click)="_scanImage()">
-  Scan Image
-</button>
 
-<button (click)="_getLocalData()">
-  Get Local Data
-</button>
-
-<button (click)="BestFit()">
-  Best Fit
-</button>
-<button (click)="FitToWidth()">
-  Fit To Width
-</button>
-<button (click)="FitToHeight()">
-  Fit to Height
-</button>
-
-<button (click)="Magnifying()">
-  Magnifying
-</button>
-
-<button (click)="DeletePage()">
-  Delete Page
-</button>
 
 

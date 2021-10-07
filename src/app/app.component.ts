@@ -4,6 +4,7 @@ import { TWAINDefaultSettings,
         TWAINScanSettings,  
         ScanDefaultSettings,
         ScanGeneralSettings} from '../interfaces/dataSourcesSettings';
+import { MatRadioButton } from '@angular/material/radio';
 declare const myTest: any;
 declare const loadImage: any;
 declare const ZoomIn: any;
@@ -22,7 +23,8 @@ declare const FitToHeight: any;
 declare const Magnifying: any;
 declare const DeletePage: any;
 declare const variableGlobal: any;
-
+declare const GetDataSourcesDos: any;
+declare const _imgScan: any;
 
 @Component({
   selector: 'app-root',
@@ -33,8 +35,9 @@ export class AppComponent {
   title = 'scanning-angular-app';
 
   stringReponse : string | null | undefined;
-  TWAINSettings : TWAINScanSettings | undefined;
-  ScanSettings : ScanGeneralSettings | undefined;
+  TWAINSettings : TWAINScanSettings = TWAINDefaultSettings;
+  ScanSettings : ScanGeneralSettings = ScanDefaultSettings;
+  dataSourceSelected : string = "TWAIN2 FreeImage Software Scanner";
   dataArray: any;
   // dataSourceSettings : TWAINScanSettings | undefined;
   testNumber : number | undefined;
@@ -50,6 +53,41 @@ export class AppComponent {
 
   NextPage(){
     NextPage();
+  }
+  
+
+  changeSource(event: any){
+    this.dataSourceSelected = event.source.selected.viewValue;
+    console.log("Valor seleccionado ", event.source.selected.viewValue)
+  }
+
+  changeScannerUI(event: any){
+    let checkedButton = event.source;
+    this.ScanSettings.ShowScannerUI = checkedButton.checked;
+  }
+
+  changeADF(event: any){
+    let checkedButton = event.source;
+    this.TWAINSettings.TwainCapabilities.IsAutoScanEnabled = checkedButton.checked;
+  }
+
+  changeAutoRemoveBlankPage(event: any){
+    let checkedButton = event.source;
+    this.TWAINSettings.TwainICapabilities.IsAutoRemoveBlankPagesEnabled = checkedButton.checked;
+  }
+
+  changeDuplexScan(event: any){
+    let checkedButton = event.source;
+    this.TWAINSettings.TwainCapabilities.IsDuplexEnabled = checkedButton.checked;
+  }
+
+  changePixelType(event: any){
+    let pixelType = parseInt(event.value);
+    this.TWAINSettings.TwainICapabilities.PixelTypeValue = pixelType;
+  }
+
+  changeResolution(event: any){
+    this.TWAINSettings.TwainICapabilities.XResolutionValue =  parseInt(event.source.selected.viewValue);
   }
 
   getSourcesAlt(){
@@ -75,6 +113,34 @@ export class AppComponent {
 
   }
 
+
+  GetDataSourcesDos(){
+    // let sourcesObtenidos = GetDataSourcesDos();
+    // console.log("Sources obtenidos ", sourcesObtenidos);
+    // GetDataSourcesDos();
+
+    _imgScan.GetScannerSources(function (sources: any) {
+      if ((sources !== null) && (sources.length > 0)) {
+          // console.log("Sources 1 ", sources);
+
+          //Set settings of each source
+
+          // let dataSourcesSettings = new Array();
+          
+          // sources.forEach(function callback(currentSource, index) {
+          //     dataSourcesSettings.push(currentSource);
+          // });
+          console.log("Data sources DOS ", sources);
+          
+          // return sources;
+          // saveLocalData(dataSourcesSettings);
+      }
+      else {
+          alert('No scanner sources found.');
+      }
+  });
+
+  }
 
   PreviousPage(){
     PreviousPage();
@@ -110,8 +176,9 @@ export class AppComponent {
   }
 
   _scanImage() {
-    this.TWAINSettings = TWAINDefaultSettings;
-    this.ScanSettings = ScanDefaultSettings;
+    this.ScanSettings.SourceName = this.dataSourceSelected;
+    console.log("TWAIN settings ", this.TWAINSettings);
+    console.log("Scan settings ", this.ScanSettings);
     _scanImage(this.ScanSettings , this.TWAINSettings);
   }
 

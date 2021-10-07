@@ -72,7 +72,11 @@ export interface FileFormat {
   XBM: number;
 }
 
+
+
+
 export interface ScanGeneralSettings {
+  SourceName: string;
   ImageAcquireMode?: number;
   FileNamePrefix?: string;
   OutputFormat?: number;
@@ -89,7 +93,7 @@ export interface ScanGeneralSettings {
   StopOnFirstResult?: boolean;
   ExtensiveSearch?: boolean;
   EnableCheckDigit?: boolean;
-  ShowScannerUI?: boolean;
+  ShowScannerUI: boolean;
   BlankPageTolerance?: number;
   OutputDirectory?: string;
   EnablePreview?: boolean;
@@ -107,6 +111,7 @@ export interface ScanGeneralSettings {
 }
 
 export let ScanDefaultSettings: ScanGeneralSettings = {
+  "SourceName": 'TWAIN2 FreeImage Software Scanner',
   "ImageAcquireMode": 0,
   "FileNamePrefix": "IMG",
   "OutputFormat": 0,

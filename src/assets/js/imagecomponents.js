@@ -18,7 +18,7 @@ ICLoader.Initialize(_webServiceURL, function () {
     _imgScan.SendImageInChunks = true;
     _imgEdit.WebServiceURL = _webServiceURL;
     _imgEdit.set_licenseValue(_license);
-    GetDataSources(true);
+    // GetDataSources(true);
 });
 
 function saveLocalData(_settings){
@@ -39,6 +39,28 @@ async function SendSources() {
     console.log(result);
     // expected output: "resolved"
   }
+
+function GetDataSourcesDos(){
+    _imgScan.GetScannerSources(function (sources) {
+        if ((sources !== null) && (sources.length > 0)) {
+            // console.log("Sources 1 ", sources);
+
+            //Set settings of each source
+
+            // let dataSourcesSettings = new Array();
+            
+            // sources.forEach(function callback(currentSource, index) {
+            //     dataSourcesSettings.push(currentSource);
+            // });
+            console.log("Data sources DOS ", sources);
+            return sources;
+            // saveLocalData(dataSourcesSettings);
+        }
+        else {
+            alert('No scanner sources found.');
+        }
+    });
+}
 
 function GetDataSources(isTwain){
 
@@ -119,7 +141,7 @@ function _getSourceSettings(source){
 }
 
 function _scanImage(_scanSettings, _TWAINSettings){
-    console.log("Custom data in javascript ", _TWAINSettings.TwainCapabilities.CustomDSData);
+    // console.log("Custom data in javascript ", _TWAINSettings.TwainCapabilities.CustomDSData);
     // if (_settings !== null) {
         if (_imgScan.ConnectionStatus !== ImgScan.ICWSocketStatus.CONNECTED) {
             _imgScan.OpenConnection(function () {
@@ -130,9 +152,10 @@ function _scanImage(_scanSettings, _TWAINSettings){
                         
                         //Set settings of each source
     
-                        _imgScan.GetScannerCaps('TWAIN2 FreeImage Software Scanner', function (caps) {
-                            console.log("Capabilities of scanner ", JSON.stringify(caps))
+                        _imgScan.GetScannerCaps(_scanSettings.SourceName, function (caps) {
+                            // console.log("Capabilities of scanner ", JSON.stringify(caps))
                             dataSourcesSettings = caps;
+                            
                             _updateScannerSettings(_scanSettings, _TWAINSettings);
                         });
                     }
@@ -142,11 +165,30 @@ function _scanImage(_scanSettings, _TWAINSettings){
                 });
             });
         }
+        _imgScan.GetScannerSources(function (sources) {
+            if ((sources !== null) && (sources.length > 0)) {
+                // loadSources(sources);
+                console.log("Sources 1 ", sources);
+                
+                //Set settings of each source
+
+                _imgScan.GetScannerCaps(_scanSettings.SourceName, function (caps) {
+                    // console.log("Capabilities of scanner ", JSON.stringify(caps))
+                    dataSourcesSettings = caps;
+                    
+                    _updateScannerSettings(_scanSettings, _TWAINSettings);
+                });
+            }
+            else {
+                alert('No scanner sources found.');
+            }
+        });
 }
 
 function _updateScannerSettings(_scanSettings, _TWAINSettings){
 
-    _imgScan.ActiveSourceName = 'TWAIN2 FreeImage Software Scanner';
+    console.log("Source name Javascript ", _scanSettings.SourceName);
+    _imgScan.ActiveSourceName = _scanSettings.SourceName;
     _imgScan.DeviceSettings = new ImgScan.ICDeviceSettings();
     _imgScan.DeviceSettings.ImageRotation = ImgScan.ICImagePageRotationType.None;
     _imgScan.DeviceSettings.ImageAcquireMode = _scanSettings.ImageAcquireMode;

@@ -6,6 +6,16 @@ import { AppComponent } from './app.component';
 // Http Cliente
 import { HttpClientModule } from '@angular/common/http';
 import { ScanViewerComponent } from './shared/Components/scan-viewer/scan-viewer.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+// Angular Material
+
+import {MatButtonModule} from '@angular/material/button';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 @NgModule({
@@ -15,7 +25,13 @@ import { ScanViewerComponent } from './shared/Components/scan-viewer/scan-viewer
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]
