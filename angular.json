@@ -40,7 +40,8 @@
               "src/assets/js/default.aspx.js",
               "src/assets/js/ImgBarDecoder-vsdoc.js",
               "src/assets/js/ImgThumbnails-vsdoc.js",
-              "src/assets/js/ImgAnnotations-vsdoc.js"
+              "src/assets/js/ImgAnnotations-vsdoc.js",
+              "src/assets/js/default.aspx.js"
             ]
           },
           "configurations": {

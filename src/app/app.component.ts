@@ -9,14 +9,19 @@ declare const loadImage: any;
 declare const ZoomIn: any;
 declare const ZoomOut: any;
 declare const ZoomTo: any;
-declare const CheckConnection: any;
 declare const loadSources: any;
 declare const initDevice: any;
-declare const sendData: any;
-declare const _getDataSources: any;
+declare const GetDataSources: any;
 declare const _getSourceSettings: any;
 declare const _scanImage: any;
-
+declare const NextPage: any;
+declare const PreviousPage: any;
+declare const BestFit: any;
+declare const FitToWidth: any;
+declare const FitToHeight: any;
+declare const Magnifying: any;
+declare const DeletePage: any;
+declare const variableGlobal: any;
 
 
 @Component({
@@ -30,42 +35,65 @@ export class AppComponent {
   stringReponse : string | null | undefined;
   TWAINSettings : TWAINScanSettings | undefined;
   ScanSettings : ScanGeneralSettings | undefined;
+  dataArray: any;
   // dataSourceSettings : TWAINScanSettings | undefined;
   testNumber : number | undefined;
 
-  constructor(private _dataService: DataService){
-    // this.getData();
-    // this.postData();
-  }
+  constructor(private _dataService: DataService){}
 
   ngOnInit(): void {
+    // console.log("Getting data sources");}
 
-    // this.dataSourceSettings = loadSources();
-    // console.log("Data source settings ", this.dataSourceSettings);
+  this._getLocalData();
 
-    // this.testNumber = sendData();
-    // console.log("Received data ", this.testNumber);
-
-    // console.log("TWAIN default settings ", TWAINSettingsDefault);
-    // this.dataSourceSettings = TWAINSettingsDefault;
-
-    // console.log("Custom data ", this.dataSourceSettings.TwainCapabilities.CustomDSData);
-
-    CheckConnection();
-    // TODO: 
-    // Use this websocket to communicate with the backend
-
-    // this._dataService.getData().subscribe(resp => {
-
-    //   this.stringReponse = resp.body || '{}';
-    //   const obj = JSON.parse(this.stringReponse);
-    //   console.log("response", obj)});
   }
 
-  loadSources(){
-    // this.dataSourceSettings = loadSources(true);
-    loadSources(true);
-    // console.log("Data sources settings ", JSON.stringify(this.dataSourceSettings));
+  NextPage(){
+    NextPage();
+  }
+
+  getSourcesAlt(){
+    const asyncSources = async () => {
+      const result = await GetDataSources(true);
+      console.log("Result ", result)
+      // return result
+    }
+
+    asyncSources();
+
+    // const fetchEmployees = async ()=> {
+    //   const api = 'http://dummy.restapiexample.com/api/v1/employees'
+    //   try {
+    //       const response = await fetch(api)
+    //       return 
+    //   } catch (error) {
+    //       if (error) {
+    //           return error.message
+    //       }
+    //   }
+  // }
+
+  }
+
+
+  PreviousPage(){
+    PreviousPage();
+  }
+
+  BestFit(){
+    BestFit();
+  }
+
+  FitToWidth(){
+    FitToWidth();
+  }
+
+  Magnifying(){
+    Magnifying();
+  }
+
+  FitToHeight(){
+    FitToHeight();
   }
 
   _getSourceSettings(){
@@ -74,12 +102,11 @@ export class AppComponent {
   }
 
   _getDataSources(){
-    // _getDataSources(true);
+    GetDataSources(true);
+    // console.log("Data sources ", dataSources);
+  }
 
-    let data = _getDataSources(true);
-
-    console.log("data source data", data)
-
+  _getLocalData(){
   }
 
   _scanImage() {
@@ -112,23 +139,8 @@ export class AppComponent {
     loadImage();
   }
 
-  CheckConnection(){
-    CheckConnection();
-  }
-
-  getData(){
-    // this._dataService.getData().subscribe(
-    //   (data) => console.log("Esta es la data del servidor websocket", data)
-    // )
-    // this._dataService.getData().subscribe(Resp => {
-    //   console.log("Get data source from angular ", Resp);
-    // })
-  }
-
-  postData(){
-    // this._dataService.getData().subscribe(
-    //   (data) => console.log("Esta es la data del servidor websocket", data)
-    // )
+  DeletePage(){
+    DeletePage();
   }
 
 }
