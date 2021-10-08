@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { DataService } from './services/data.service';
 import { TWAINDefaultSettings, 
         TWAINScanSettings,  
         ScanDefaultSettings,
         ScanGeneralSettings} from '../interfaces/dataSourcesSettings';
-import { MatRadioButton } from '@angular/material/radio';
+import { interval, Subscription } from 'rxjs';
+
+
+
 declare const myTest: any;
 declare const loadImage: any;
 declare const zoomIn: any;
@@ -25,41 +28,44 @@ declare const deletePage: any;
 declare const dataSettings: any;
 
 
-declare let dataArraydos: any;
+declare let dataSourcesSettingsdos: any;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit  {
   title = 'scanning-angular-app';
-
+  subscription!: Subscription;
   stringReponse : string | null | undefined;
   TWAINSettings : TWAINScanSettings = TWAINDefaultSettings;
   ScanSettings : ScanGeneralSettings = ScanDefaultSettings;
   dataSourceSelected : string = "TWAIN2 FreeImage Software Scanner";
-  dataArray: any;
-  // dataSourceSettings : TWAINScanSettings | undefined;
-  testNumber : number | undefined;
+  dataSourcesSettings: any;
+  
 
   constructor(private _dataService: DataService){}
 
   ngOnInit(): void {
-    setTimeout(() => {
+
+    //Fucntion to get data sources of every 100 miliseconds
+
+    const source = interval(100);
+    this.subscription = source.subscribe(()=>{
       this.getDataSources();
-    }, 3000);
+    })
+  }
+
+  ngOnChanges(changes: any){
+
+    console.log("Changes ", changes.this.dataSourcesSettings);
   }
 
   getDataSources(){
-    this.dataArray = dataSettings;
-    console.log("Data obtenida del JS ", this.dataArray);
-  }
-
-  nextPage(){
-    nextPage();
-  }
-  
+    this.dataSourcesSettings = dataSettings;
+    // console.log("Data obtenida del JS ", this.dataSourcesSettings);
+  }  
 
   changeSource(event: any){
     this.dataSourceSelected = event.source.selected.viewValue;
@@ -120,6 +126,10 @@ export class AppComponent {
 
   // Functions to edit images
 
+  nextPage(){
+    nextPage();
+  }
+
   previousPage(){
     previousPage();
   }
@@ -158,6 +168,10 @@ export class AppComponent {
 
   deletePage(){
     deletePage();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

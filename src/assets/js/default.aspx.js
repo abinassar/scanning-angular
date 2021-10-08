@@ -39,7 +39,7 @@ function openImage() {
 
 
 
-function scanImage() {
+function _scanImage() {
     //Close existing image if open.
     _imgEdit.Close();
     var select = document.getElementById("ddSources");

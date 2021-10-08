@@ -1,7 +1,11 @@
 <button (click)="loadImage()">Click Me</button>
 
 
+<div *ngIf="dataSourcesSettings == undefined">
 
+  Data Sources no han llegado
+
+</div>
 
 <div fxLayout="row"
      fxLayoutAlign="center center">
