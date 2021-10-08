@@ -15,54 +15,54 @@
          class="buttons">
       <button mat-stroked-button
               class="fs-20"
-              (click)="ZoomIn()">
+              (click)="zoomIn()">
           <i class="fas fa-search-plus"></i>
       </button>
 
       <button mat-stroked-button
               class="fs-20"
-              (click)="ZoomOut()">
+              (click)="zoomOut()">
           <i class="fas fa-search-minus"></i>
       </button>
 
       <button mat-stroked-button
               class="fs-20"
-              (click)="ZoomTo()">
+              (click)="zoomTo()">
         <i class="fas fa-vector-square"></i>
       </button>
       <button mat-stroked-button
               class="fs-20"
-              (click)="BestFit()">
+              (click)="bestFit()">
         <i class="fas fa-expand-arrows-alt"></i>
       </button>
       <button mat-stroked-button
               class="fs-20"
-              (click)="FitToWidth()">
+              (click)="fitToWidth()">
         <i class="fas fa-arrows-alt-h"></i>
       </button>
       <button mat-stroked-button
               class="fs-20"
-              (click)="FitToHeight()">
+              (click)="fitToHeight()">
         <i class="fas fa-arrows-alt-v"></i>
       </button>
       
       <button mat-stroked-button
               class="fs-20"
-              (click)="Magnifying()">
+              (click)="magnifying()">
         <i class="fas fa-search"></i>
       </button>
       
       <button mat-stroked-button
               class="fs-20"
-              (click)="DeletePage()">
+              (click)="deletePage()">
         <i class="far fa-trash-alt"></i>
       </button>
     </div>
     <!-- Image Edit and Thumbstails -->
     <div fxLayout="row"
          class="mt-20">
-      <div id="ImgThumbnails1" style="width:200px;height:500px;"></div>
-      <div id="imgEdit1" style="width:400px;height:500px;"></div>
+      <div id="ImgThumbnails" style="width:200px;height:500px;"></div>
+      <div id="imgEdit" style="width:400px;height:500px;"></div>
     </div>
 
     <!-- Buttons to next and previous page -->
@@ -72,12 +72,12 @@
          fxLayoutAlign="flex-end">
       <button mat-flat-button
               class="fs-20"
-              (click)="PreviousPage()">
+              (click)="previousPage()">
         <i class="fas fa-arrow-left"></i>
       </button>
       <button mat-flat-button
               class="fs-20"
-              (click)="NextPage()">
+              (click)="nextPage()">
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
@@ -174,7 +174,7 @@
     <div fxFlexAlign="center">
       <button mat-stroked-button
               class="scan-button mr-20"
-              (click)="_scanImage()">
+              (click)="scanImage()">
               Scan
       </button>
       <button mat-stroked-button
@@ -186,26 +186,15 @@
 
     <div>
 
-      <button (click)="GetDataSourcesDos()">
-        Get data sources dos
-      </button>
-
-
-
-      <button (click)="_getDataSources()">
+      <button (click)="getDataSources()">
         Get Sources
       </button>
-      
-      <button (click)="getSourcesAlt()">
-      
-        Get Sources Alt
-      </button>
-      
-      <button (click)="_getSourceSettings()">
+            
+      <button (click)="getSourceSettings()">
         Get Source Settings
       </button>
       
-      <button (click)="_scanImage()">
+      <button (click)="scanImage()">
         Scan Image
       </button>
       
@@ -225,7 +214,7 @@
 
 
 
-<div id="imgScan1"></div>
+<div id="imgScan"></div>
 
 
 

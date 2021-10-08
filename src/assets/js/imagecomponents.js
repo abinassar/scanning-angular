@@ -6,25 +6,26 @@ var _imgEdit = null;
 var _imgScan = new ImgScan();
 var _imgThumbnails = new ImgThumbnails();
 var _isMobile = true;
+var dataSettings;
 
 
 ICLoader.Initialize(_webServiceURL, function () {
     var _license = "";
-    _imgEdit = new ImgEdit('imgEdit1');
-    _imgScan = new ImgScan('imgScan1');
-    _imgThumbnails = new ImgThumbnails('ImgThumbnails1');
+    _imgEdit = new ImgEdit('imgEdit');
+    _imgScan = new ImgScan('imgScan');
+    _imgThumbnails = new ImgThumbnails('ImgThumbnails');
     _imgThumbnails.ImgEditComponent = _imgEdit;
     _imgScan.ImgEditComponent = _imgEdit;
     _imgScan.SendImageInChunks = true;
     _imgEdit.WebServiceURL = _webServiceURL;
     _imgEdit.set_licenseValue(_license);
-    // GetDataSources(true);
+    getDataSources(true);
 });
 
-function saveLocalData(_settings){
+function saveLocalData(_settings, key){
     if (typeof Storage !== "undefined" && ICUtils.isLocalStorageSupported()) {
         if (_settings !== null) {
-            localStorage.setItem("DataSources", JSON.stringify(_settings));
+            localStorage.setItem(key, JSON.stringify(_settings));
         }
     }
     else {
@@ -32,52 +33,36 @@ function saveLocalData(_settings){
     }
 }
 
-
-async function SendSources() {
-    console.log('calling');
-    const result = await GetDataSources();
-    console.log(result);
-    // expected output: "resolved"
-  }
-
-function GetDataSources(isTwain){
+function getDataSources(isTwain){
 
     if (_imgScan.ConnectionStatus !== ImgScan.ICWSocketStatus.CONNECTED) {
         _imgScan.OpenConnection(function () {
             _imgScan.GetScannerSources(function (sources) {
                 if ((sources !== null) && (sources.length > 0)) {
-                    // console.log("Sources 1 ", sources);
 
-                    //Set settings of each source
-
-                    let dataSourcesSettings = new Array();
+                    dataSourcesSettings = [];
                     
                     sources.forEach(function callback(currentSource, index) {
-
-                        // dataSourcesSettings.push(currentSource);
                     
                         //Set settings of each source
 
                         _imgScan.GetScannerCaps(currentSource, function (caps) {
-                            console.log("index ", index);
-                            // dataSourcesSettings[index] = new Array();
-                            // dataSourcesSettings[index].push(caps);
-                            // let sourceObj = {
-                            //     SourceName: currentSource,
-                            //     SourceSettings: caps
-                            //    };
 
-                            let sourceObj = {
+                            sourceObj = {
                                 SourceName: currentSource,
                                 SourceSettings: caps
                                };
-                            dataSourcesSettings.push(sourceObj);
+
+                            this.dataSourcesSettings.push(sourceObj);
+
                             console.log("Data settings ", dataSourcesSettings);
-                            // console.log("Capabilities of scanner ", JSON.stringify(caps));
+                            console.log("Data settings stringify ", JSON.stringify(dataSourcesSettings));
+
+                            dataSettings = dataSourcesSettings;
                         });
+                        console.log("settings con scope ", this.dataSourcesSettings);
+                        saveLocalData(dataSourcesSettings, "DataSources");
                     });
-                    console.log("Data sources total ", dataSourcesSettings);
-                    saveLocalData(dataSourcesSettings);
                 }
                 else {
                     alert('No scanner sources found.');
@@ -88,43 +73,36 @@ function GetDataSources(isTwain){
     else {
         _imgScan.GetScannerSources(function (sources) {
             if ((sources !== null) && (sources.length > 0)) {
-                let dataSourcesSettings = new Array();
+
+                dataSourcesSettings = [];
 
                 sources.forEach(function callback(currentSource, index) {
-                    
-                    // dataSourcesSettings.push(currentSource);
                     
                     //Set settings of each source
 
                     _imgScan.GetScannerCaps(currentSource, function (caps) {
-                        console.log("index ", index);
-                        // dataSourcesSettings[index] = new Array();
-                        // dataSourcesSettings[index].push(caps);
+
                         let sourceObj = {
                             SourceName: currentSource,
                             SourceSettings: caps
                            };
                         
                         dataSourcesSettings.push(sourceObj);
-                        console.log("Data settings ", dataSourcesSettings);
-                        // console.log("Capabilities of scanner ", JSON.stringify(caps));
+                        console.log("Capabilities of scanner ", JSON.stringify(caps));
+                        saveLocalData(dataSourcesSettings, "DataSources");
+                        dataSettings = dataSourcesSettings;
                     });
                 });
-                console.log("Data sources total ", dataSourcesSettings);
-                saveLocalData(dataSourcesSettings);
-                
-                // return dataSourcesSettings;
             }
             else {
                 alert('No scanner sources found.');
-                // return null;
             }
         })
     }
 
 }
 
-function _getSourceSettings(source){
+function getSourceSettings(source){
 
     if (_imgScan.ConnectionStatus !== ImgScan.ICWSocketStatus.CONNECTED) {
         _imgScan.OpenConnection(function () {
@@ -157,8 +135,8 @@ function _getSourceSettings(source){
     }
 }
 
-function _scanImage(_scanSettings, _TWAINSettings){
-    // console.log("Custom data in javascript ", _TWAINSettings.TwainCapabilities.CustomDSData);
+function scanImage(scanSettings, TWAINSettings){
+    // console.log("Custom data in javascript ", TWAINSettings.TwainCapabilities.CustomDSData);
     // if (_settings !== null) {
         if (_imgScan.ConnectionStatus !== ImgScan.ICWSocketStatus.CONNECTED) {
             _imgScan.OpenConnection(function () {
@@ -169,11 +147,11 @@ function _scanImage(_scanSettings, _TWAINSettings){
                         
                         //Set settings of each source
     
-                        _imgScan.GetScannerCaps(_scanSettings.SourceName, function (caps) {
+                        _imgScan.GetScannerCaps(scanSettings.SourceName, function (caps) {
                             // console.log("Capabilities of scanner ", JSON.stringify(caps))
                             dataSourcesSettings = caps;
                             
-                            _updateScannerSettings(_scanSettings, _TWAINSettings);
+                            updateScannerSettings(scanSettings, TWAINSettings);
                         });
                     }
                     else {
@@ -189,11 +167,11 @@ function _scanImage(_scanSettings, _TWAINSettings){
                 
                 //Set settings of each source
 
-                _imgScan.GetScannerCaps(_scanSettings.SourceName, function (caps) {
+                _imgScan.GetScannerCaps(scanSettings.SourceName, function (caps) {
                     // console.log("Capabilities of scanner ", JSON.stringify(caps))
                     dataSourcesSettings = caps;
                     
-                    _updateScannerSettings(_scanSettings, _TWAINSettings);
+                    updateScannerSettings(scanSettings, TWAINSettings);
                 });
             }
             else {
@@ -202,54 +180,54 @@ function _scanImage(_scanSettings, _TWAINSettings){
         });
 }
 
-function _updateScannerSettings(_scanSettings, _TWAINSettings){
+function updateScannerSettings(scanSettings, TWAINSettings){
 
-    console.log("Source name Javascript ", _scanSettings.SourceName);
-    _imgScan.ActiveSourceName = _scanSettings.SourceName;
+    console.log("Source name Javascript ", scanSettings.SourceName);
+    _imgScan.ActiveSourceName = scanSettings.SourceName;
     _imgScan.DeviceSettings = new ImgScan.ICDeviceSettings();
     _imgScan.DeviceSettings.ImageRotation = ImgScan.ICImagePageRotationType.None;
-    _imgScan.DeviceSettings.ImageAcquireMode = _scanSettings.ImageAcquireMode;
-    _imgScan.DeviceSettings.FileNamePrefix = _scanSettings.FileNamePrefix;
-    _imgScan.DeviceSettings.OutputFormat = _scanSettings.OutputFormat;
-    _imgScan.DeviceSettings.OutputCompression = _scanSettings.OutputCompression;
-    _imgScan.DeviceSettings.ImageBinarizationFilter = _scanSettings.BinarizationFilter;
-    _imgScan.DeviceSettings.BlankPageTolerance = _scanSettings.BlankPageTolerance;
-    _imgScan.DeviceSettings.ImagePageSeparation = _scanSettings.ImagePageSeparation;
-    _imgScan.DeviceSettings.BarcodeTypes.push(_scanSettings.BarcodeTypes[0]);
-    _imgScan.DeviceSettings.BarcodeSeparationValue = _scanSettings.BarcodeSeparationValue;
-    _imgScan.DeviceSettings.PageCountSeparationValue = _scanSettings.PageCountSeparationValue;
-    _imgScan.DeviceSettings.RemoveBlankPages = _scanSettings.RemoveBlankPages;
-    _imgScan.DeviceSettings.RemoveBarcodePage = _scanSettings.RemoveBarcodePage;
-    _imgScan.DeviceSettings.ShowScannerUI = _scanSettings.ShowScannerUI;
-    _imgScan.DeviceSettings.IsBarcodeInFirstPage = _scanSettings.IsBarcodeInFirstPage;
-    _imgScan.DeviceSettings.EnablePreview = _scanSettings.EnablePreview;
-    _imgScan.DeviceSettings.OutputDirectory = _scanSettings.OutputDirectory;
-    _imgScan.DeviceDriverType = _scanSettings.DeviceDriverType;
+    _imgScan.DeviceSettings.ImageAcquireMode = scanSettings.ImageAcquireMode;
+    _imgScan.DeviceSettings.FileNamePrefix = scanSettings.FileNamePrefix;
+    _imgScan.DeviceSettings.OutputFormat = scanSettings.OutputFormat;
+    _imgScan.DeviceSettings.OutputCompression = scanSettings.OutputCompression;
+    _imgScan.DeviceSettings.ImageBinarizationFilter = scanSettings.BinarizationFilter;
+    _imgScan.DeviceSettings.BlankPageTolerance = scanSettings.BlankPageTolerance;
+    _imgScan.DeviceSettings.ImagePageSeparation = scanSettings.ImagePageSeparation;
+    _imgScan.DeviceSettings.BarcodeTypes.push(scanSettings.BarcodeTypes[0]);
+    _imgScan.DeviceSettings.BarcodeSeparationValue = scanSettings.BarcodeSeparationValue;
+    _imgScan.DeviceSettings.PageCountSeparationValue = scanSettings.PageCountSeparationValue;
+    _imgScan.DeviceSettings.RemoveBlankPages = scanSettings.RemoveBlankPages;
+    _imgScan.DeviceSettings.RemoveBarcodePage = scanSettings.RemoveBarcodePage;
+    _imgScan.DeviceSettings.ShowScannerUI = scanSettings.ShowScannerUI;
+    _imgScan.DeviceSettings.IsBarcodeInFirstPage = scanSettings.IsBarcodeInFirstPage;
+    _imgScan.DeviceSettings.EnablePreview = scanSettings.EnablePreview;
+    _imgScan.DeviceSettings.OutputDirectory = scanSettings.OutputDirectory;
+    _imgScan.DeviceDriverType = scanSettings.DeviceDriverType;
 
     // Set the TWAIN Settings
 
     _imgScan.SetTwainSettings = new ImgScan.TwainValues();
     _imgScan.SetTwainSettings.TwainCapabilities = new ImgScan.Capabilities();
-    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoDeskewEnabled = _TWAINSettings.TwainCapabilities.IsAutoDeskewEnabled;
-    _imgScan.SetTwainSettings.TwainCapabilities.IsDuplexEnabled = _TWAINSettings.TwainCapabilities.IsDuplexEnabled;
-    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoBorderDetectionEnabled = _TWAINSettings.TwainCapabilities.IsAutoBorderDetectionEnabled;
-    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoScanEnabled = _TWAINSettings.TwainCapabilities.IsAutoScanEnabled;
-    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoFeedEnabled = _TWAINSettings.TwainCapabilities.IsAutoFeedEnabled;
-    _imgScan.SetTwainSettings.TwainCapabilities.IsFeederEnabled = _TWAINSettings.TwainCapabilities.IsFeederEnabled;
-    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoRotationEnabled = _TWAINSettings.TwainCapabilities.IsAutoRotationEnabled;
+    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoDeskewEnabled = TWAINSettings.TwainCapabilities.IsAutoDeskewEnabled;
+    _imgScan.SetTwainSettings.TwainCapabilities.IsDuplexEnabled = TWAINSettings.TwainCapabilities.IsDuplexEnabled;
+    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoBorderDetectionEnabled = TWAINSettings.TwainCapabilities.IsAutoBorderDetectionEnabled;
+    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoScanEnabled = TWAINSettings.TwainCapabilities.IsAutoScanEnabled;
+    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoFeedEnabled = TWAINSettings.TwainCapabilities.IsAutoFeedEnabled;
+    _imgScan.SetTwainSettings.TwainCapabilities.IsFeederEnabled = TWAINSettings.TwainCapabilities.IsFeederEnabled;
+    _imgScan.SetTwainSettings.TwainCapabilities.IsAutoRotationEnabled = TWAINSettings.TwainCapabilities.IsAutoRotationEnabled;
     _imgScan.SetTwainSettings.TwainICapabilities = new ImgScan.ImageCapabilities();
     _imgScan.SetTwainSettings.TwainICapabilities.UnitsValue = ImgScan.ICAP_UNITS.INCHES;
-    _imgScan.SetTwainSettings.TwainICapabilities.ImageXferMech = _TWAINSettings.TwainICapabilities.ImageXferMech;
-    _imgScan.SetTwainSettings.TwainICapabilities.ImageFileFormatValue = _TWAINSettings.TwainICapabilities.ImageFileFormatValue;
-    _imgScan.SetTwainSettings.TwainICapabilities.PaperOrientationValue = _TWAINSettings.TwainICapabilities.PaperOrientationValue;
-    _imgScan.SetTwainSettings.TwainICapabilities.PaperSizeValue = _TWAINSettings.TwainICapabilities.PaperSizeValue;
-    _imgScan.SetTwainSettings.TwainICapabilities.XResolutionValue = _TWAINSettings.TwainICapabilities.XResolutionValue;
-    _imgScan.SetTwainSettings.TwainICapabilities.YResolutionValue = _TWAINSettings.TwainICapabilities.XResolutionValue;
-    _imgScan.SetTwainSettings.TwainICapabilities.PixelTypeValue = _TWAINSettings.TwainICapabilities.PixelTypeValue;
-    _imgScan.SetTwainSettings.TwainICapabilities.IsAutoBrightEnabled = _TWAINSettings.TwainICapabilities.IsAutoBrightEnabled;
-    _imgScan.SetTwainSettings.TwainICapabilities.IsAutoRemoveBlankPagesEnabled = _TWAINSettings.TwainICapabilities.IsAutoRemoveBlankPagesEnabled;
-    _imgScan.SetTwainSettings.TwainICapabilities.BrightnessValue = _TWAINSettings.TwainICapabilities.BrightnessValue;
-    _imgScan.SetTwainSettings.TwainICapabilities.ContrastValue = _TWAINSettings.TwainICapabilities.ContrastValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.ImageXferMech = TWAINSettings.TwainICapabilities.ImageXferMech;
+    _imgScan.SetTwainSettings.TwainICapabilities.ImageFileFormatValue = TWAINSettings.TwainICapabilities.ImageFileFormatValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.PaperOrientationValue = TWAINSettings.TwainICapabilities.PaperOrientationValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.PaperSizeValue = TWAINSettings.TwainICapabilities.PaperSizeValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.XResolutionValue = TWAINSettings.TwainICapabilities.XResolutionValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.YResolutionValue = TWAINSettings.TwainICapabilities.XResolutionValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.PixelTypeValue = TWAINSettings.TwainICapabilities.PixelTypeValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.IsAutoBrightEnabled = TWAINSettings.TwainICapabilities.IsAutoBrightEnabled;
+    _imgScan.SetTwainSettings.TwainICapabilities.IsAutoRemoveBlankPagesEnabled = TWAINSettings.TwainICapabilities.IsAutoRemoveBlankPagesEnabled;
+    _imgScan.SetTwainSettings.TwainICapabilities.BrightnessValue = TWAINSettings.TwainICapabilities.BrightnessValue;
+    _imgScan.SetTwainSettings.TwainICapabilities.ContrastValue = TWAINSettings.TwainICapabilities.ContrastValue;
     _imgScan.SetTwainSettings.TwainICapabilities.UnitsValue = ImgScan.ICAP_UNITS.INCHES;
     _imgScan.Acquire();
 }
@@ -262,47 +240,47 @@ function ZoomIn(){
     _imgEdit.MoreZoom();
 }
 
-function ZoomOut(){
+function zoomOut(){
     _imgEdit.LessZoom();
 }
 
-function ZoomTo(){
+function zoomTo(){
     _imgEdit.EnableSelectionType = ImgEdit.ICSelectionType.ZOOMSELECTION;
 }
 
-function NextPage(){
+function nextPage(){
     _imgEdit.NextPage();
 }
 
-function PreviousPage(){
+function previousPage(){
     _imgEdit.PreviousPage();
 }
 
-function RotateRight(){
+function rotateRight(){
     _imgEdit.RotateRight();
 }
 
-function RotateLeft(){
+function rotateLeft(){
     _imgEdit.RotateLeft();
 }
 
-function BestFit(){
+function bestFit(){
     _imgEdit.FitTo(ImgEdit.ICImageFit.BESTFIT, true);
 }
 
-function FitToWidth(){
+function fitToWidth(){
     _imgEdit.FitTo(ImgEdit.ICImageFit.FITTOWIDTH, true);
 }
 
-function FitToHeight(){
+function fitToHeight(){
     _imgEdit.FitTo(ImgEdit.ICImageFit.FITTOHEIGHT, true);
 }
 
-function Magnifying(){
+function magnifying(){
     _imgEdit.EnableSelectionType = ImgEdit.ICSelectionType.MAGNIFYINGGLASS;
 }
 
-function DeletePage(){
+function deletePage(){
     _imgEdit.DeletePage(_imgEdit.SelectedPage);
 }
 

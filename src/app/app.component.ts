@@ -7,22 +7,23 @@ import { TWAINDefaultSettings,
 import { MatRadioButton } from '@angular/material/radio';
 declare const myTest: any;
 declare const loadImage: any;
-declare const ZoomIn: any;
-declare const ZoomOut: any;
-declare const ZoomTo: any;
+declare const zoomIn: any;
+declare const zoomOut: any;
+declare const zoomTo: any;
 declare const loadSources: any;
 declare const initDevice: any;
-declare const GetDataSources: any;
-declare const _getSourceSettings: any;
-declare const _scanImage: any;
-declare const NextPage: any;
-declare const PreviousPage: any;
-declare const BestFit: any;
-declare const FitToWidth: any;
-declare const FitToHeight: any;
-declare const Magnifying: any;
-declare const DeletePage: any;
-declare const _imgScan: any;
+declare const getDataSources: any;
+declare const getSourceSettings: any;
+declare const scanImage: any;
+declare const nextPage: any;
+declare const previousPage: any;
+declare const bestFit: any;
+declare const fitToWidth: any;
+declare const fitToHeight: any;
+declare const magnifying: any;
+declare const deletePage: any;
+declare const dataSettings: any;
+
 
 declare let dataArraydos: any;
 
@@ -45,20 +46,23 @@ export class AppComponent {
   constructor(private _dataService: DataService){}
 
   ngOnInit(): void {
-    // console.log("Getting data sources");}
-
-  this._getLocalData();
-
+    setTimeout(() => {
+      this.getDataSources();
+    }, 3000);
   }
 
-  NextPage(){
-    NextPage();
+  getDataSources(){
+    this.dataArray = dataSettings;
+    console.log("Data obtenida del JS ", this.dataArray);
+  }
+
+  nextPage(){
+    nextPage();
   }
   
 
   changeSource(event: any){
     this.dataSourceSelected = event.source.selected.viewValue;
-    console.log("Valor seleccionado ", event.source.selected.viewValue)
   }
 
   changeScannerUI(event: any){
@@ -90,82 +94,8 @@ export class AppComponent {
     this.TWAINSettings.TwainICapabilities.XResolutionValue =  parseInt(event.source.selected.viewValue);
   }
 
-  getSourcesAlt(){
-    const asyncSources = async () => {
-      const result = await GetDataSources(true);
-      console.log("Result ", result)
-      // return result
-    }
-
-    asyncSources();
-
-    // const fetchEmployees = async ()=> {
-    //   const api = 'http://dummy.restapiexample.com/api/v1/employees'
-    //   try {
-    //       const response = await fetch(api)
-    //       return 
-    //   } catch (error) {
-    //       if (error) {
-    //           return error.message
-    //       }
-    //   }
-  // }
-
-  }
-
-
-  async GetDataSourcesDos(){
-
-    let sourcesReceived = await _imgScan.GetScannerSources(function (sources: any) {
-      if ((sources !== null) && (sources.length > 0)) {
-
-          console.log("Data sources total ", sources);
-          let select : HTMLElement | null; 
-          select = document.getElementById("testsources");
-          let option = document.createElement('option');
-                option.text = option.value = sources[0];
-                console.log()
-      }
-      else {
-          alert('No scanner sources found.');
-      }
-  });
-
-
-  //   _imgScan.GetScannerSources(function (sources: any) {
-  //     if ((sources !== null) && (sources.length > 0)) {
-  //         console.log("Data sources DOS ", sources);
-  //     }
-  //     else {
-  //         alert('No scanner sources found.');
-  //     }
-  // });
-
-  }
-
-  PreviousPage(){
-    PreviousPage();
-  }
-
-  BestFit(){
-    BestFit();
-  }
-
-  FitToWidth(){
-    FitToWidth();
-  }
-
-  Magnifying(){
-    Magnifying();
-  }
-
-  FitToHeight(){
-    FitToHeight();
-  }
-
-  _getSourceSettings(){
-    _getSourceSettings('TWAIN2 FreeImage Software Scanner');
-    // _getSourceSettings('HP Photosmart C4100 TWAIN');
+  getSourceSettings(){
+    getSourceSettings('TWAIN2 FreeImage Software Scanner');
   }
 
   getLocalData(){
@@ -174,51 +104,60 @@ export class AppComponent {
     // return localData;
   }
 
-  _getDataSources(){
-    GetDataSources(true);
-    setTimeout(() => {
-      this.getLocalData();    
-      }, 500);
-
-    // console.log("Data sources obtenidos", this.dataArray);
-  }
-
   _getLocalData(){
   }
 
-  _scanImage() {
+  scanImage() {
     this.ScanSettings.SourceName = this.dataSourceSelected;
     console.log("TWAIN settings ", this.TWAINSettings);
     console.log("Scan settings ", this.ScanSettings);
-    _scanImage(this.ScanSettings , this.TWAINSettings);
+    scanImage(this.ScanSettings , this.TWAINSettings);
   }
 
   initDevice(){
     initDevice();
   }
 
-  onClick(){
-      myTest();
+  // Functions to edit images
+
+  previousPage(){
+    previousPage();
   }
 
-  ZoomIn(){
-    ZoomIn();
+  bestFit(){
+    bestFit();
   }
 
-  ZoomOut(){
-    ZoomOut();
+  fitToWidth(){
+    fitToWidth();
   }
 
-  ZoomTo(){
-    ZoomTo();
+  magnifying(){
+    magnifying();
+  }
+
+  fitToHeight(){
+    fitToHeight();
+  }
+
+  zoomIn(){
+    zoomIn();
+  }
+
+  zoomOut(){
+    zoomOut();
+  }
+
+  zoomTo(){
+    zoomTo();
   }
 
   loadImage(){
     loadImage();
   }
 
-  DeletePage(){
-    DeletePage();
+  deletePage(){
+    deletePage();
   }
 
 }
