@@ -40,28 +40,6 @@ async function SendSources() {
     // expected output: "resolved"
   }
 
-function GetDataSourcesDos(){
-    _imgScan.GetScannerSources(function (sources) {
-        if ((sources !== null) && (sources.length > 0)) {
-            // console.log("Sources 1 ", sources);
-
-            //Set settings of each source
-
-            // let dataSourcesSettings = new Array();
-            
-            // sources.forEach(function callback(currentSource, index) {
-            //     dataSourcesSettings.push(currentSource);
-            // });
-            console.log("Data sources DOS ", sources);
-            return sources;
-            // saveLocalData(dataSourcesSettings);
-        }
-        else {
-            alert('No scanner sources found.');
-        }
-    });
-}
-
 function GetDataSources(isTwain){
 
     if (_imgScan.ConnectionStatus !== ImgScan.ICWSocketStatus.CONNECTED) {
@@ -75,7 +53,28 @@ function GetDataSources(isTwain){
                     let dataSourcesSettings = new Array();
                     
                     sources.forEach(function callback(currentSource, index) {
-                        dataSourcesSettings.push(currentSource);
+
+                        // dataSourcesSettings.push(currentSource);
+                    
+                        //Set settings of each source
+
+                        _imgScan.GetScannerCaps(currentSource, function (caps) {
+                            console.log("index ", index);
+                            // dataSourcesSettings[index] = new Array();
+                            // dataSourcesSettings[index].push(caps);
+                            // let sourceObj = {
+                            //     SourceName: currentSource,
+                            //     SourceSettings: caps
+                            //    };
+
+                            let sourceObj = {
+                                SourceName: currentSource,
+                                SourceSettings: caps
+                               };
+                            dataSourcesSettings.push(sourceObj);
+                            console.log("Data settings ", dataSourcesSettings);
+                            // console.log("Capabilities of scanner ", JSON.stringify(caps));
+                        });
                     });
                     console.log("Data sources total ", dataSourcesSettings);
                     saveLocalData(dataSourcesSettings);
@@ -92,17 +91,35 @@ function GetDataSources(isTwain){
                 let dataSourcesSettings = new Array();
 
                 sources.forEach(function callback(currentSource, index) {
-                    dataSourcesSettings.push(currentSource);
+                    
+                    // dataSourcesSettings.push(currentSource);
+                    
+                    //Set settings of each source
+
+                    _imgScan.GetScannerCaps(currentSource, function (caps) {
+                        console.log("index ", index);
+                        // dataSourcesSettings[index] = new Array();
+                        // dataSourcesSettings[index].push(caps);
+                        let sourceObj = {
+                            SourceName: currentSource,
+                            SourceSettings: caps
+                           };
+                        
+                        dataSourcesSettings.push(sourceObj);
+                        console.log("Data settings ", dataSourcesSettings);
+                        // console.log("Capabilities of scanner ", JSON.stringify(caps));
+                    });
                 });
                 console.log("Data sources total ", dataSourcesSettings);
                 saveLocalData(dataSourcesSettings);
+                
                 // return dataSourcesSettings;
             }
             else {
                 alert('No scanner sources found.');
                 // return null;
             }
-        });
+        })
     }
 
 }

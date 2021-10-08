@@ -22,9 +22,9 @@ declare const FitToWidth: any;
 declare const FitToHeight: any;
 declare const Magnifying: any;
 declare const DeletePage: any;
-declare const variableGlobal: any;
-declare const GetDataSourcesDos: any;
 declare const _imgScan: any;
+
+declare let dataArraydos: any;
 
 @Component({
   selector: 'app-root',
@@ -114,31 +114,32 @@ export class AppComponent {
   }
 
 
-  GetDataSourcesDos(){
-    // let sourcesObtenidos = GetDataSourcesDos();
-    // console.log("Sources obtenidos ", sourcesObtenidos);
-    // GetDataSourcesDos();
+  async GetDataSourcesDos(){
 
-    _imgScan.GetScannerSources(function (sources: any) {
+    let sourcesReceived = await _imgScan.GetScannerSources(function (sources: any) {
       if ((sources !== null) && (sources.length > 0)) {
-          // console.log("Sources 1 ", sources);
 
-          //Set settings of each source
-
-          // let dataSourcesSettings = new Array();
-          
-          // sources.forEach(function callback(currentSource, index) {
-          //     dataSourcesSettings.push(currentSource);
-          // });
-          console.log("Data sources DOS ", sources);
-          
-          // return sources;
-          // saveLocalData(dataSourcesSettings);
+          console.log("Data sources total ", sources);
+          let select : HTMLElement | null; 
+          select = document.getElementById("testsources");
+          let option = document.createElement('option');
+                option.text = option.value = sources[0];
+                console.log()
       }
       else {
           alert('No scanner sources found.');
       }
   });
+
+
+  //   _imgScan.GetScannerSources(function (sources: any) {
+  //     if ((sources !== null) && (sources.length > 0)) {
+  //         console.log("Data sources DOS ", sources);
+  //     }
+  //     else {
+  //         alert('No scanner sources found.');
+  //     }
+  // });
 
   }
 
@@ -167,9 +168,19 @@ export class AppComponent {
     // _getSourceSettings('HP Photosmart C4100 TWAIN');
   }
 
+  getLocalData(){
+    let localData = localStorage.getItem("DataSources");
+    console.log("Data del local estorage ", localData);
+    // return localData;
+  }
+
   _getDataSources(){
     GetDataSources(true);
-    // console.log("Data sources ", dataSources);
+    setTimeout(() => {
+      this.getLocalData();    
+      }, 500);
+
+    // console.log("Data sources obtenidos", this.dataArray);
   }
 
   _getLocalData(){
