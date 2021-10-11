@@ -1,11 +1,16 @@
-<button (click)="loadImage()">Click Me</button>
+<!-- <button (click)="loadImage()">Click Me</button>
 
 
 <div *ngIf="dataSourcesSettings == undefined">
 
   Data Sources no han llegado
 
-</div>
+</div> -->
+
+<button (click)="getImageFileFormat()">
+  Get image formats
+</button>
+
 
 <div fxLayout="row"
      fxLayoutAlign="center center">
@@ -91,8 +96,8 @@
 
   <div fxLayout="column">
 
-    <div class="custom-settings-title">
-      Custom Settings
+    <div class="section-settings-title">
+      Scan Settings
     </div>
 
     <div class="options-container">
@@ -103,7 +108,10 @@
         <mat-form-field appearance="fill">
           <mat-label>Select a Scanner</mat-label>
           <mat-select (selectionChange)=changeSource($event)>
-            <mat-option value="option1">TWAIN2 FreeImage Software Scanner</mat-option>
+            <div *ngIf="dataSourcesSettings !== undefined">
+            <mat-option *ngFor="let dataSource of dataSourcesSettings[0]?.SourceName"
+                         value="{{dataSource}}">{{dataSource}}</mat-option>
+            </div>
           </mat-select>
         </mat-form-field>
       </div>
@@ -159,17 +167,17 @@
         </mat-radio-group>
       </div>
   
-      <div fxLayout="row">
+      <!-- <div fxLayout="row">
         <h3 class="mr-10">Resolution:</h3>
         <mat-form-field appearance="fill">
           <mat-label>Resolution</mat-label>
-          <mat-select (selectionChange)=changeResolution($event)>
-            <mat-option value="option1">50</mat-option>
-            <mat-option value="option2">100</mat-option>
-            <mat-option value="option3">200</mat-option>
+          <mat-select (selectionChange)=changeResolution($event) 
+                      >
+            <mat-option *ngFor="let resolution of dataSourcesSettings[this.indexSelectedSource].SourceSettings.TwainICapabilities.ICapabilitiesValues.XResolutions; let i=index"
+                         value="{{resolution}}">{{resolution}}</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+      </div> -->
     </div>
 
 
@@ -188,35 +196,44 @@
       </button>
     </div>
 
-    <div>
+    <div class="section-settings-title mt-20">
+      Document Settings
+    </div>
 
-      <button (click)="getDataSources()">
-        Get Sources
-      </button>
-            
-      <button (click)="getSourceSettings()">
-        Get Source Settings
-      </button>
-      
-      <button (click)="scanImage()">
-        Scan Image
-      </button>
-      
-      <button (click)="_getLocalData()">
-        Get Local Data
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>File Name</mat-label>
+      <input matInput placeholder="Ex. Pizza" value="SCAN IMAGE">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+    <mat-label>File Format</mat-label>
+    <mat-select (selectionChange)=changeImageFormat($event)>
+      <mat-option *ngFor="let fileFormat of fileFormatAndCompression; let index=index" 
+                  value="{{ fileFormat.imageFormat }}"
+                  (click)="getImageFormatIndex(index)">
+                    {{fileFormat.imageFormat}}          
+      </mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+    <mat-label>Compression Type</mat-label>
+    <mat-select (selectionChange)=changeImageFormat($event)>
+      <mat-option *ngFor="let compressionType of fileFormatAndCompression[imageFormatIndex].imageCompression; let i=index"
+                  value="opc1">{{compressionType}}</mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <div fxFlexAlign="center">
+      <button mat-stroked-button
+              class="scan-button mr-20"
+              (click)="saveLocalImage()">
+              Save Document
       </button>
     </div>
 
   </div>
-
-<!-- <div fxLayout="column">
-
-</div> -->
-
 </div>
-
-
-
 
 <div id="imgScan"></div>
 

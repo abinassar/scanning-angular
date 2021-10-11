@@ -1,10 +1,13 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from './services/data.service';
 import { TWAINDefaultSettings, 
         TWAINScanSettings,  
         ScanDefaultSettings,
-        ScanGeneralSettings} from '../interfaces/dataSourcesSettings';
+        ScanGeneralSettings} from '../models/sources-settings.model';
 import { interval, Subscription } from 'rxjs';
+import { ImageCompression, SaveFileType, } from 'src/models/image-format.model';
+import { FileOutputFormat,
+        fileFormatAndCompression } from '../models/image-format.model';
 
 
 
@@ -26,7 +29,8 @@ declare const fitToHeight: any;
 declare const magnifying: any;
 declare const deletePage: any;
 declare const dataSettings: any;
-
+declare const getImageFileFormat: any;
+declare const saveLocalImage: any;
 
 declare let dataSourcesSettingsdos: any;
 
@@ -35,7 +39,7 @@ declare let dataSourcesSettingsdos: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit  {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'scanning-angular-app';
   subscription!: Subscription;
   stringReponse : string | null | undefined;
@@ -43,32 +47,58 @@ export class AppComponent implements OnInit  {
   ScanSettings : ScanGeneralSettings = ScanDefaultSettings;
   dataSourceSelected : string = "TWAIN2 FreeImage Software Scanner";
   dataSourcesSettings: any;
-  
-
+  indexSelectedSource: number = 0;
+  fileFormatAndCompression = fileFormatAndCompression;
+  imageFormatIndex: number = 0;
   constructor(private _dataService: DataService){}
 
   ngOnInit(): void {
 
-    //Fucntion to get data sources of every 100 miliseconds
+
+
+    console.log("Image format ", fileFormatAndCompression[1].imageFormat);
+
+    console.log("Image format ", fileFormatAndCompression[1].imageCompression);
+
+    //Function to get data sources of every 100 miliseconds
 
     const source = interval(100);
     this.subscription = source.subscribe(()=>{
       this.getDataSources();
+      if (this.dataSourcesSettings !== undefined) {
+        localStorage.setItem("DataSources", JSON.stringify(this.dataSourcesSettings));
+      }
     })
+
+  
+
   }
 
-  ngOnChanges(changes: any){
-
-    console.log("Changes ", changes.this.dataSourcesSettings);
+  getImageFileFormat(){
+    getImageFileFormat();
   }
 
   getDataSources(){
     this.dataSourcesSettings = dataSettings;
-    // console.log("Data obtenida del JS ", this.dataSourcesSettings);
   }  
+
+  saveLocalImage(){
+    saveLocalImage("pruebaLOCAL", 40, 3, 2);
+  }
 
   changeSource(event: any){
     this.dataSourceSelected = event.source.selected.viewValue;
+    this.indexSelectedSource = this.dataSourcesSettings[0].SourceName.findIndex(
+      (source: any) => source === this.dataSourceSelected
+    )
+  }
+
+  changeImageFormat(event: any){
+    console.log("Index of image format ", event);
+  }
+
+  getImageFormatIndex(index: number){
+    this.imageFormatIndex = index;
   }
 
   changeScannerUI(event: any){
@@ -115,8 +145,8 @@ export class AppComponent implements OnInit  {
 
   scanImage() {
     this.ScanSettings.SourceName = this.dataSourceSelected;
-    console.log("TWAIN settings ", this.TWAINSettings);
-    console.log("Scan settings ", this.ScanSettings);
+    // console.log("TWAIN settings ", this.TWAINSettings);
+    // console.log("Scan settings ", this.ScanSettings);
     scanImage(this.ScanSettings , this.TWAINSettings);
   }
 

@@ -33,6 +33,27 @@ function saveLocalData(_settings, key){
     }
 }
 
+function getImageFileFormat(){
+    let imageFormat = _imgEdit.ImageFileProperties.ImageFileFormat;
+    console.log("Image format ", imageFormat);
+}
+
+function saveLocalImage(_fileName, _imageFormat, _imageCompression, _pageOptions){
+    
+    // _fileName += _imgEdit.ImageFileProperties.ImageFileExtension;
+
+    _fileName += ".pdf";
+
+    _imgEdit.ImageOCRLanguage = 0;
+    _imgEdit.ICImageOCRType = 3;
+    _imgEdit.SavePDFAsSearchable = false;
+    _imgEdit.SavePDFAsPDFA = false;
+    _imgEdit.SaveOutputType = ImgEdit.ICImageIOType.Local;
+    _imgEdit.SavePNGFlags = ImgEdit.ICPNGImageFlags.BESTCOMPRESSION;
+    _imgEdit.DownloadFile = true;
+    _imgEdit.SaveImageAs(_fileName, _imageFormat, _imageCompression, _pageOptions);
+}
+
 function getDataSources(isTwain){
 
     if (_imgScan.ConnectionStatus !== ImgScan.ICWSocketStatus.CONNECTED) {
@@ -41,28 +62,22 @@ function getDataSources(isTwain){
                 if ((sources !== null) && (sources.length > 0)) {
 
                     dataSourcesSettings = [];
-                    
-                    sources.forEach(function callback(currentSource, index) {
-                    
-                        //Set settings of each source
 
-                        _imgScan.GetScannerCaps(currentSource, function (caps) {
+                    for (let index = 0; index < sources.length; index++) {
+                        
+                        _imgScan.GetScannerCaps(sources[index], function (caps) {
 
+                            sourceObj = {};
                             sourceObj = {
-                                SourceName: currentSource,
+                                SourceName: sources,
                                 SourceSettings: caps
-                               };
-
+                            };
                             this.dataSourcesSettings.push(sourceObj);
-
-                            console.log("Data settings ", dataSourcesSettings);
-                            console.log("Data settings stringify ", JSON.stringify(dataSourcesSettings));
-
-                            dataSettings = dataSourcesSettings;
                         });
-                        console.log("settings con scope ", this.dataSourcesSettings);
-                        saveLocalData(dataSourcesSettings, "DataSources");
-                    });
+                        
+                    }
+                    // Set settings of the data sources
+                    dataSettings = dataSourcesSettings;
                 }
                 else {
                     alert('No scanner sources found.');
@@ -74,31 +89,32 @@ function getDataSources(isTwain){
         _imgScan.GetScannerSources(function (sources) {
             if ((sources !== null) && (sources.length > 0)) {
 
+                console.log("Sources ", sources);
+
                 dataSourcesSettings = [];
 
-                sources.forEach(function callback(currentSource, index) {
+                for (let index = 0; index < sources.length; index++) {
                     
-                    //Set settings of each source
+                    _imgScan.GetScannerCaps(sources[index], function (caps) {
 
-                    _imgScan.GetScannerCaps(currentSource, function (caps) {
-
-                        let sourceObj = {
-                            SourceName: currentSource,
+                        sourceObj = {};
+                        sourceObj = {
+                            SourceName: sources,
                             SourceSettings: caps
-                           };
-                        
-                        dataSourcesSettings.push(sourceObj);
-                        console.log("Capabilities of scanner ", JSON.stringify(caps));
-                        saveLocalData(dataSourcesSettings, "DataSources");
-                        dataSettings = dataSourcesSettings;
+                        };
+
+                        this.dataSourcesSettings.push(sourceObj);
                     });
-                });
+                    
+                }
+                // Set settings of the data sources
+                dataSettings = dataSourcesSettings;
             }
             else {
                 alert('No scanner sources found.');
             }
-        })
-    }
+        });
+}
 
 }
 
@@ -136,19 +152,15 @@ function getSourceSettings(source){
 }
 
 function scanImage(scanSettings, TWAINSettings){
-    // console.log("Custom data in javascript ", TWAINSettings.TwainCapabilities.CustomDSData);
-    // if (_settings !== null) {
+
         if (_imgScan.ConnectionStatus !== ImgScan.ICWSocketStatus.CONNECTED) {
             _imgScan.OpenConnection(function () {
                 _imgScan.GetScannerSources(function (sources) {
                     if ((sources !== null) && (sources.length > 0)) {
-                        // loadSources(sources);
-                        console.log("Sources 1 ", sources);
                         
                         //Set settings of each source
     
                         _imgScan.GetScannerCaps(scanSettings.SourceName, function (caps) {
-                            // console.log("Capabilities of scanner ", JSON.stringify(caps))
                             dataSourcesSettings = caps;
                             
                             updateScannerSettings(scanSettings, TWAINSettings);
@@ -162,15 +174,11 @@ function scanImage(scanSettings, TWAINSettings){
         }
         _imgScan.GetScannerSources(function (sources) {
             if ((sources !== null) && (sources.length > 0)) {
-                // loadSources(sources);
-                console.log("Sources 1 ", sources);
                 
                 //Set settings of each source
 
                 _imgScan.GetScannerCaps(scanSettings.SourceName, function (caps) {
-                    // console.log("Capabilities of scanner ", JSON.stringify(caps))
                     dataSourcesSettings = caps;
-                    
                     updateScannerSettings(scanSettings, TWAINSettings);
                 });
             }

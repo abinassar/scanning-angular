@@ -53,28 +53,6 @@ export interface TwainCapabilities {
   ShowProgressIndicator: boolean;
 }
 
-export interface FileFormat {
-  BMP: number;
-  DEJAVU: number;
-  EXIF: number;
-  FPX: number;
-  JFIF: number;
-  JP2: number;
-  JPX: number;
-  PDF: number;
-  PDFA: number;
-  PDFA2: number;
-  PICT: number;
-  PNG: number;
-  SPIFF: number;
-  TIFF: number;
-  TIFFMULTI: number;
-  XBM: number;
-}
-
-
-
-
 export interface ScanGeneralSettings {
   SourceName: string;
   ImageAcquireMode?: number;
